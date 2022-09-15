@@ -1,9 +1,10 @@
-import 'package:chat_app/models/usermodel.dart';
 import 'package:chat_app/pages/complete_profile.dart';
+import 'package:chat_app/models/dialog_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/user_model.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -26,26 +27,26 @@ class _SignUpPageState extends State<SignUpPage> {
     String cpassword = cpasswordController.text.trim();
 
     if(email==""||password==""||cpassword==""){
-      print("Please fil all the fields");
+      DialogHelper.showAlertDialog(context, "Incomplete Data", "Please fill all the fields");
     }
 
     else if(password!=cpassword){
-      print("Passwords do not match");
+      DialogHelper.showAlertDialog(context, "Passwords mismatch", "The password you enetred do not match");
     }
 
     else{
-      print("Successful");
       signUp(email, password);
     }
   }
 
   void signUp(String email, String password) async {
     UserCredential? credential;
-
+  DialogHelper.showLoadingDialog(context, "Creating new account...");
     try{
       credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch(ex){
-      print(ex.code.toString());
+      Navigator.pop(context);
+      DialogHelper.showAlertDialog(context, "An error occured", ex.message.toString());
     }
     if(credential!=null){
       String uid = credential.user!.uid;
@@ -58,7 +59,8 @@ class _SignUpPageState extends State<SignUpPage> {
       await FirebaseFirestore.instance.collection("users").doc(uid).set(
         newUser.toMap()
       ).then((value) => print("User Created!"));
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>CompleteProfile(userModel: newUser, firebaseUser: credential!.user!)));
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CompleteProfile(userModel: newUser, firebaseUser: credential!.user!)));
     }
   }
 
