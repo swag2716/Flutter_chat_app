@@ -1,5 +1,6 @@
 ![Chat App preview1](https://user-images.githubusercontent.com/74863784/190612148-9e08b4d7-d407-435a-8a4a-3322b78c6df8.jpeg)
-![WhatsApp Image 2022-09-16 at 15 11 46](https://user-images.githubusercontent.com/74863784/190612203-992bac85-fab6-4074-b5aa-e84ae68c2c51.jpeg)
+![Chat App preview2](https://user-images.githubusercontent.com/74863784/190612620-b4136e45-6861-4325-8ae3-c2ac0a027143.jpeg)
+
 # chat_app
 
 A new Flutter project.
